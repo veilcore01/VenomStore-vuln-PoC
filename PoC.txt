@@ -1,0 +1,48 @@
+═══════════════════════════════════════════════════════════════
+            VenomStore - Race Condition PoC
+            Wheel of Fortune Unlimited Rewards
+═══════════════════════════════════════════════════════════════
+
+1. VULNERABILITY TYPE
+────────────────────
+  Race Condition / Replay Attack
+
+2. AFFECTED ENDPOINT
+────────────────────
+  OPTIONS /functions/v1/retail-mini-app-serve
+  Parameters:
+    - action: spin_fortune_wheel
+    - bot_id: 4f0355aa-9791-4912-9136-917f2658188d
+    - _t: timestamp (unix milliseconds)
+
+3. EXPLOITATION STEPS
+────────────────────
+
+  Step 1: Intercept Requests
+  Use Burp Suite to intercept all requests during wheel spin.
+
+  Step 2: Drop Confirmation Requests (with Proxy tab)
+  When wheel stops and reward is displayed:
+  - Drop (do not forward) the confirmation request
+  - Frontend treats this as timeout/error
+  - Spin state is rolled back
+
+  Step 3: Repeat
+  Spin again. Spin count not consumed because confirmation was dropped.
+  Repeat indefinitely until desired reward appears.
+
+  Step 4: Accept Reward
+  Once desired reward acquired, allow confirmation request to pass.
+  Reward is applied to account.
+
+  Step 5: Replay Confirmation
+  Due to missing idempotency checks, replay same confirmation request
+  multiple times. Each replay applies reward again.
+
+4. IMPACT
+─────────
+  - Unlimited accumulation of in-app currency
+  - Financial loss for platform
+  - Potential for abuse in other endpoints
+
+═══════════════════════════════════════════════════════════════
