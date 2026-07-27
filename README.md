@@ -15,6 +15,6 @@ The Wheel of Fortune endpoint lacks idempotency checks. By intercepting and drop
 - Potential for abuse in other endpoints
 
 ## Credits
-**Discovered by:** nocivics  
+**Discovered by:** [CIVØ](https://t.me/+9UF1gyryCJw4ODk9) 
 **Date:** 2026-07-24
 **Bot username:** @VenomEuropeBot (https://t.me/VenomEuropeBot)
